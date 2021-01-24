@@ -1,0 +1,102 @@
+{
+  "buyOrWrite":{
+    "headerName": "Buy/Write",
+    "field": "buyOrWrite",
+    "width": 120,
+    "type": "buyOrWrite"
+  },
+  "callOrPut":{
+    "headerName": "Call/Put",
+    "field": "callOrPut",
+    "width": 110,
+    "type": "callOrPut"
+  },
+  "expiryDate": {
+    "headerName": "Expiry Date",
+    "field": "expiryDate",
+    "width": 120,
+    "type": "expiryDate"
+  },
+  "strike": {
+    "headerName": "Strike",
+    "field": "strike",
+    "type": "decimalColumn",
+    "width": 110,
+    "sort":"asc"
+  },
+    "lastPrice": {
+    "headerName": "Last Price",
+    "field": "lastPrice",
+    "type": "decimalColumn",
+    "width": 110
+  },
+  "bid": {
+    "headerName": "Bid",
+    "field": "bid",
+    "type": "decimalColumn"
+  },
+    "ask": {
+    "headerName": "Ask",
+    "field": "ask",
+    "type": "decimalColumn"
+  },
+  "change": {
+    "headerName": "Change",
+    "field": "change",
+    "width": 110,
+    "type": "changeColumn"
+  },
+    "percentChange": {
+    "headerName": "Percent Change",
+    "field": "percentChange",
+    "width": 110,
+    "type": "percentageColumn"
+  },
+    "volume": {
+    "headerName": "Volume",
+    "field": "volume",
+    "width": 110,
+    "type": "integerColumn"
+  },
+  "openInterest": {
+    "headerName": "Open Interest",
+    "field": "openInterest",
+    "type": "integerColumn",
+    "width":120
+  },
+    "impliedVolatility": {
+    "headerName": "IV",
+    "field": "impliedVolatility",
+    "type": "decimalColumn",
+    "width": 130,
+    "type": "percentageColumn"
+  },
+  "inTheMoney": {
+    "headerName": "ITM",
+    "field": "inTheMoney",
+    "type": "booleanColumn",
+    "width": 130,
+    "hide": true
+  },
+  "contractSize": {
+    "headerName": "Contract Size",
+    "field": "contractSize"
+  },
+  "contractSymbol": {
+    "headerName": "Contract symbol",
+    "field": "contractSymbol",
+    "checkboxSelection": false,
+    "width": 190
+  },
+  "lastTradeDate":{
+    "headerName": "Last Trade Date",
+    "field": "lastTradeDate",
+    "width": 160,
+    "type": "unixTimeColumn"
+  },
+  "currency": {
+    "headerName": "Currency",
+    "field": "currency",
+    "width": 120
+  }
+}
