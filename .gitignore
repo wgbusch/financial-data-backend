@@ -24,7 +24,7 @@ yarn-error.log*
 
 #data files
 /data/historical_data/*.csv
-/data/market_daata/*.csv
+/data/market_data/*.csv
 /data/options/*.csv
 
 #intelliJ

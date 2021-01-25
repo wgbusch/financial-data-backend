@@ -135,9 +135,10 @@ class mainObj:
             end = len(watchlist)
         i = start
         while (i + self.SLICE <= end):
-            response.append(self.fetch_today_info(watchlist[i:i + self.SLICE]))
+            response.extend(self.fetch_today_info(watchlist[i:i + self.SLICE]))
             i += self.SLICE
-        response.append(self.fetch_today_info(watchlist[i - self.SLICE:end]))
+        if (i < end):
+            response.extend(self.fetch_today_info(watchlist[i:end]))
 
         json_data = json.loads(pd.concat(response).to_json(orient="records"))
         columns_state = self.db.get_columns_state(view_name)
@@ -157,7 +158,6 @@ class mainObj:
     def fetch_today_info(self, watchlist: List[dict]):
         if (datetime.datetime.today().weekday() in [6, 7]):
             return self.db.get_from_historical_data(list(map(lambda item: item["symbol"], watchlist)))
-
         missing = []
         response = []
         try:
@@ -177,12 +177,10 @@ class mainObj:
             df = self.batch_download(missing)
             self.db.save_market_data(df)
             # df.to_csv(market_data_filename)
-        return df
+        return response
 
     # 4
     def batch_download(self, list_of_tickers_to_download):
-        if list_of_tickers_to_download is None:
-            list_of_tickers_to_download = self.list_of_tickers
         currentDate = datetime.date.today()
 
         manager = multiprocessing.Manager()
@@ -198,7 +196,7 @@ class mainObj:
     def get_info_for_ticker(self, ticker, market_data, interval='1d'):
         try:
             data = self.download_ticker(ticker["symbol"])
-            #sometimes yf returns duplicate data, so we keep only the last row.
+            # sometimes yf returns duplicate data, so we keep only the last row.
             if (len(data) > 1):
                 data = data.iloc[[-1]]
             data["Symbol"] = np.array(ticker["symbol"])

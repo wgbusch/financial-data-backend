@@ -19,6 +19,7 @@ MARKET_DATA_DIRECTORY = "data/market_data/"
 HISTORICAL_DATA_DIRECTORY = "data/historical_data/"
 OPTIONS_DATA_DIRECTORY = "data/options/"
 COLUMNS_STATE_DIRECTORY = "data/columns_state/"
+COLUMNS_STATE = COLUMNS_STATE_DIRECTORY + 'columns_state.txt'
 
 
 class db:
@@ -68,7 +69,7 @@ class db:
                 sys.stdout = sys.__stdout__
                 df.to_csv(file_name)
 
-            #get only latest market day
+            # get only latest market day
             if (len(df) > 0):
                 response.append(df.iloc[[-interval]])
         return pd.concat(response)
@@ -99,13 +100,11 @@ class db:
 
     ##columns state view
     def save_columns_state(self, req):
-        if not os.path.exists(COLUMNS_STATE_DIRECTORY):
-            os.mkdir(COLUMNS_STATE_DIRECTORY)
         json_wrapper_for_view = {"isLatest": 1,
                                  "updateDate": str(dt.now().utcnow()),
                                  "data": req}
         try:
-            f = open(COLUMNS_STATE_DIRECTORY + 'columns_state.txt', "r+")
+            f = open(COLUMNS_STATE, "r+")
             views = json.load(f)
             f.seek(0)
             for view in views:
@@ -115,22 +114,17 @@ class db:
             f.close()
         except Exception as e:
             list_of_views = [json_wrapper_for_view]
-            with open(COLUMNS_STATE_DIRECTORY + 'views.txt', 'w') as json_file:
+            with open(COLUMNS_STATE, 'w') as json_file:
                 json.dump(list_of_views, json_file)
         return None
 
     def get_columns_state(self, view_name):
-        if not os.path.exists(COLUMNS_STATE_DIRECTORY):
-            os.mkdir(COLUMNS_STATE_DIRECTORY)
-        try:
-            f = open(COLUMNS_STATE_DIRECTORY + 'views.txt', "r+")
-            views = json.load(f)
-            views = list(filter(lambda view_item: view_item["isLatest"] == 1, views))
-            if (len(views) > 1):
-                return {}
-            return json.dumps(views[0]["data"])
-        except Exception as e:
+        f = open(COLUMNS_STATE, "r+")
+        views = json.load(f)
+        views = list(filter(lambda view_item: view_item["isLatest"] == 1, views))
+        if (len(views) > 1):
             return {}
+        return json.dumps(views[0]["data"])
 
     def get_market_data(self):
         market_data_filename = MARKET_DATA_DIRECTORY + str(datetime.date.today()) + ".csv"
