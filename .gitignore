@@ -26,7 +26,7 @@ yarn-error.log*
 */data/historical_data/*.csv
 */data/market_data/*.csv
 */data/options/*.csv
-*/__pycache__
+*/app/db/__pycache__
 
 #intelliJ
 /.idea
