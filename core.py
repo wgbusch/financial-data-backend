@@ -163,9 +163,7 @@ class mainObj:
         try:
             df = self.db.get_market_data()
             for ticker in watchlist:
-                if (ticker["symbol"] in df['Symbol'].tolist()):
-                    response.append(df[df['Symbol'] == ticker["symbol"]])
-                else:
+                if (ticker["symbol"] not in df['Symbol'].tolist()):
                     missing.append(ticker)
             if (len(missing) > 0):
                 df_missing = self.batch_download(missing)
@@ -177,6 +175,8 @@ class mainObj:
             df = self.batch_download(missing)
             self.db.save_market_data(df)
             # df.to_csv(market_data_filename)
+        for ticker in watchlist:
+            response.append(df[df['Symbol'] == ticker["symbol"]])
         return response
 
     # 4
