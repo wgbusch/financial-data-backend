@@ -23,9 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 
 #data files
-/data/historical_data/*.csv
-/data/market_data/*.csv
-/data/options/*.csv
+*/data/historical_data/*.csv
+*/data/market_data/*.csv
+*/data/options/*.csv
+*/__pycache__
 
 #intelliJ
 /.idea
