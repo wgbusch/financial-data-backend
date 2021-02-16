@@ -31,5 +31,4 @@ yarn-error.log*
 #intelliJ
 /.idea
 /__pycache__
-/.idea
 /app/SaxoConnection.py
