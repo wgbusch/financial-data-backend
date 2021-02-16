@@ -13,13 +13,13 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime as dt
 
-from TickersController import get_initial_list_of_tickers
-
-MARKET_DATA_DIRECTORY = "data/market_data/"
-HISTORICAL_DATA_DIRECTORY = "data/historical_data/"
-OPTIONS_DATA_DIRECTORY = "data/options/"
-COLUMNS_STATE_DIRECTORY = "data/columns_state/"
+MARKET_DATA_DIRECTORY = "app/data/market_data/"
+HISTORICAL_DATA_DIRECTORY = "app/data/historical_data/"
+OPTIONS_DATA_DIRECTORY = "app/data/options/"
+COLUMNS_STATE_DIRECTORY = "app/data/columns_state/"
 COLUMNS_STATE = COLUMNS_STATE_DIRECTORY + 'columns_state.txt'
+COLUMNS_MAP = 'app/data/columns_state/COLUMNS_MAP.txt'
+INITIAL_DATA_FILE = 'app\data\initial_tickers_list.txt'
 
 
 class db:
@@ -36,7 +36,7 @@ class db:
         if not os.path.exists(COLUMNS_STATE_DIRECTORY):
             os.mkdir(COLUMNS_STATE_DIRECTORY)
 
-        with open('data\initial_tickers_list.txt') as csv_file:
+        with open(INITIAL_DATA_FILE) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter='|')
             line_count = 0
             for row in csv_reader:
@@ -138,3 +138,14 @@ class db:
     def get_initial_list_of_tickers(self):
         return list(filter(lambda ticker: not bool(re.search('\$[A-Z]|File Creation Time|\.[A-Z]', ticker["symbol"])),
                            self.list_of_tickers))
+
+    def get_grid_columns_map(self, data):
+        columns_to_retrieve = []
+
+        with open(COLUMNS_MAP) as f:
+            columns_map = json.load(f)
+
+        for column in data[0].keys():
+            if column in columns_map:
+                columns_to_retrieve.append(columns_map[column])
+        return columns_to_retrieve

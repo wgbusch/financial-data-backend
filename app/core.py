@@ -5,7 +5,6 @@ import multiprocessing
 import os
 import re
 import sys
-from datetime import datetime as dt
 from typing import List
 
 import numpy as np
@@ -16,7 +15,6 @@ from joblib import Parallel, delayed, parallel_backend
 # Data viz
 from tqdm import tqdm
 
-from TickersController import get_initial_list_of_tickers
 from db import db
 
 #
@@ -208,13 +206,7 @@ class mainObj:
             pass
 
     def add_master_grid_columns(self, data):
-        columns_to_retrieve = []
-        with open('data/columns_state/COLUMNS_MAP.txt') as f:
-            columns_map = json.load(f)
-
-        for column in data[0].keys():
-            if column in columns_map:
-                columns_to_retrieve.append(columns_map[column])
+        columns_to_retrieve = self.db.get_grid_columns_map(data)
         return columns_to_retrieve
 
     def save_columns_state(self, req):

@@ -7,3 +7,4 @@ flask_restful
 html5lib
 flask_cors
 flask-swagger
+gunicorn
