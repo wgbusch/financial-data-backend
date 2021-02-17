@@ -12,7 +12,7 @@ import pandas as pd
 # Data Source
 import yfinance as yf
 from flask import jsonify
-from joblib import Parallel, delayed, parallel_backend
+# from joblib import Parallel, delayed, parallel_backend
 # Data viz
 from tqdm import tqdm
 
@@ -107,13 +107,16 @@ class mainObj:
     def batch_download(self, list_of_tickers_to_download):
         currentDate = datetime.date.today()
 
-        manager = multiprocessing.Manager()
-        market_data = manager.list()
+        # manager = multiprocessing.Manager()
+        market_data = []
 
-        with parallel_backend('loky', n_jobs=multiprocessing.cpu_count()):
-            Parallel()(delayed(self.get_info_for_ticker)(ticker, market_data, currentDate)
-                       for ticker in tqdm(list_of_tickers_to_download))
-        df = pd.concat(list(market_data))
+        for ticker in tqdm(list_of_tickers_to_download):
+            self.get_info_for_ticker(ticker, market_data)
+
+        # with parallel_backend('loky', n_jobs=multiprocessing.cpu_count()):
+        #     Parallel()(delayed(self.get_info_for_ticker)(ticker, market_data, currentDate)
+        #                for ticker in tqdm(list_of_tickers_to_download))
+        df = pd.concat(market_data)
         return df
 
     # 5
