@@ -52,31 +52,26 @@ class mainObj:
 
     # 1
     def get_market_overview(self, watchlist_name: str, start: int, end: int, view_name: str):
-        try:
-            watchlist = self.get_watchlist(watchlist_name)
-            response = []
-            if (end is None):
-                end = len(watchlist)
-            i = start
-            while (i + self.SLICE <= end):
-                response.extend(self.fetch_today_info(watchlist[i:i + self.SLICE]))
-                i += self.SLICE
-            if (i < end):
-                response.extend(self.fetch_today_info(watchlist[i:end]))
-
-            json_data = json.loads(pd.concat(response).to_json(orient="records"))
-            columns_state = self.db.get_columns_state(view_name)
-            response = {"data": json_data,
-                        "columnDefs": self.add_master_grid_columns(json_data),
-                        "columnsState": columns_state
-                        }
-
-            return json.dumps(response)
-        except Exception as e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
-            print('-------------' + str(e) + '-------------')
+        watchlist = self.get_watchlist(watchlist_name)
+        response = []
+        if (end is None):
+            end = len(watchlist)
+        i = start
+        while (i + self.SLICE <= end):
+            response.extend(self.fetch_today_info(watchlist[i:i + self.SLICE]))
+            i += self.SLICE
+        if (i < end):
+            response.extend(self.fetch_today_info(watchlist[i:end]))
+        print(response)
+        json_data = json.loads(pd.concat(response).to_json(orient="records"))
+        columns_state = self.db.get_columns_state(view_name)
+        response = {"data": json_data,
+                    "columnDefs": self.add_master_grid_columns(json_data),
+                    "columnsState": columns_state
+                    }
+        print(response["columnDefs"])
+        print(response["columnsState"])
+        return json.dumps(response)
 
     # 2
     def get_watchlist(self, watchlist: str) -> List[dict]:
