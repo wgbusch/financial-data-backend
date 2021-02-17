@@ -13,13 +13,13 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime as dt
 
-MARKET_DATA_DIRECTORY = "app/data/market_data/"
-HISTORICAL_DATA_DIRECTORY = "app/data/historical_data/"
-OPTIONS_DATA_DIRECTORY = "app/data/options/"
-COLUMNS_STATE_DIRECTORY = "app/data/columns_state/"
+MARKET_DATA_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/market_data/"
+HISTORICAL_DATA_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/historical_data/"
+OPTIONS_DATA_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/options/"
+COLUMNS_STATE_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/columns_state/"
 COLUMNS_STATE = COLUMNS_STATE_DIRECTORY + 'columns_state.txt'
-COLUMNS_MAP = 'app/data/columns_state/COLUMNS_MAP.txt'
-INITIAL_DATA_FILE = 'app\data\initial_tickers_list.txt'
+COLUMNS_MAP = COLUMNS_STATE_DIRECTORY + 'COLUMNS_MAP.txt'
+INITIAL_DATA_FILE = os.environ.get('MAINDIRECTORY') + '/initial_tickers_list.txt'
 
 
 class db:
