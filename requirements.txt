@@ -8,3 +8,6 @@ html5lib
 flask_cors
 flask-swagger
 gunicorn
+tqdm
+Flask
+joblib

@@ -1,0 +1,85 @@
+{
+  "Name": {
+    "headerName": "Name",
+    "field": "Name",
+    "checkboxSelection": false,
+    "width": 200,
+    "cellRenderer": "agGroupCellRenderer"
+  },
+  "longName":{
+    "headerName": "Name",
+    "field": "longName",
+    "checkboxSelection": false,
+    "width": 200
+  },
+  "Symbol": {
+    "headerName": "Symbol",
+    "field": "Symbol"
+  },
+    "symbol": {
+    "headerName": "Symbol",
+    "field": "symbol"
+  },
+  "Close": {
+    "headerName": "Close",
+    "field": "Close",
+    "type": "decimalColumn"
+  },
+    "previousClose": {
+    "headerName": "Close",
+    "field": "previousClose",
+    "type": "decimalColumn"
+  },
+  "Volume": {
+    "headerName": "Volume",
+    "field": "Volume",
+    "width": 110,
+    "type": "integerColumn"
+  },
+    "volume": {
+    "headerName": "Volume",
+    "field": "volume",
+    "width": 110,
+    "type": "integerColumn"
+  },
+  "Low": {
+    "headerName": "Low",
+    "field": "Low",
+    "type": "decimalColumn"
+  },
+    "dayLow": {
+    "headerName": "Low",
+    "field": "dayLow",
+    "type": "decimalColumn"
+  },
+  "High": {
+    "headerName": "High",
+    "field": "High",
+    "type": "decimalColumn"
+  },
+    "dayHigh": {
+    "headerName": "High",
+    "field": "dayHigh",
+    "type": "decimalColumn"
+  },
+  "Open": {
+    "headerName": "Open",
+    "field": "Open",
+    "type": "decimalColumn"
+  },
+  "open": {
+    "headerName": "Open",
+    "field": "open",
+    "type": "decimalColumn"
+  },
+  "Is_ETF": {
+    "headerName": "ETF?",
+    "field": "Is_ETF",
+    "width": 90
+  },
+  "Date": {
+    "headerName": "Date",
+    "field": "Date",
+    "width": 110
+  }
+}

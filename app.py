@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_restful import Resource, Api
 
 import core
+import options_logic
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}})
@@ -68,7 +69,8 @@ class Option(Resource):
         if symbol == None or len(symbol) == 0:
             return "Error: No id field provided. Please specify an id.", 400
         try:
-            data = {"hola":"123"}
+            data = options_logic.get_options_expiry_dates(symbol)
+
             resp = Response(data, status=200, mimetype='application/json',
                             headers={"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type"})
             return resp
