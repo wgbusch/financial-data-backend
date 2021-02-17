@@ -1,10 +1,13 @@
-pandas
-numpy
-Yfinance
+pandas~=1.2.0
+numpy~=1.19.4
+Yfinance~=0.1.55
 plotly
-requests
+requests~=2.25.1
 flask_restful
 html5lib
 flask_cors
 flask-swagger
 gunicorn
+tqdm~=4.48.0
+Flask~=1.1.2
+joblib~=0.16.0
