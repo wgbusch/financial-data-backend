@@ -23,13 +23,11 @@ yarn-debug.log*
 yarn-error.log*
 
 #data files
-*/data/historical_data/*.csv
-*/data/market_data/*.csv
-*/data/options/*.csv
-*/app/db/__pycache__/*
-*/app/__pycache__/*
+historical_data/
+market_data/
+options/
 
 #intelliJ
-/.idea
-/__pycache__
+.idea/
+__pycache__/
 /app/SaxoConnection.py
