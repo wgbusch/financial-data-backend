@@ -13,7 +13,7 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime as dt
 
-MARKET_DATA_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/market_data/"
+MARKET_DATA_DIRECTORY = ''+os.environ.get('MAINDIRECTORY') + "/market_data/"
 HISTORICAL_DATA_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/historical_data/"
 OPTIONS_DATA_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/options/"
 COLUMNS_STATE_DIRECTORY = os.environ.get('MAINDIRECTORY') + "/columns_state/"
