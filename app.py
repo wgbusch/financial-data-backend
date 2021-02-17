@@ -7,11 +7,11 @@ from flask_restful import Resource, Api
 
 import core
 import options_logic
-
+print('-----main running 1----')
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}})
 api = Api(app)
-
+mainObj = core.mainObj()
 
 @app.route("/api/v1/columns-state/", methods=["POST"])
 def post_columns_state():
@@ -107,6 +107,5 @@ api.add_resource(MarketOverview, '/api/v1/market-overview/', endpoint='market-ov
 api.add_resource(Option, '/api/v1/options/option_dates/<string:symbol>/', endpoint='option')
 
 if __name__ == '__main__':
-    print('-----main running----')
-    mainObj = core.mainObj()
+    print('-----main running 0----')
     app.run()

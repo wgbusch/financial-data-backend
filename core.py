@@ -30,7 +30,6 @@ class mainObj:
 
     def __init__(self):
         self.db = db.db()
-        print("----init db-----")
         self.list_of_tickers = self.db.get_initial_list_of_tickers()
 
     def main_func(self):
