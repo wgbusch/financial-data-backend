@@ -70,6 +70,7 @@ class Option(Resource):
             return "Error: No id field provided. Please specify an id.", 400
         try:
             data = options_logic.get_options_expiry_dates(symbol)
+
             resp = Response(data, status=200, mimetype='application/json',
                             headers={"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type"})
             return resp
