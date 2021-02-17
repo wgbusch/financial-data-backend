@@ -79,7 +79,7 @@ class Option(Resource):
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print(exc_type, fname, exc_tb.tb_lineno)
+            print(exc_type, fname, exc_tb.tb_lineno, exc_obj)
             response = jsonify(data='Error finding Market Data')
             return response, 500
 
@@ -107,5 +107,6 @@ api.add_resource(MarketOverview, '/api/v1/market-overview/', endpoint='market-ov
 api.add_resource(Option, '/api/v1/options/option_dates/<string:symbol>/', endpoint='option')
 
 if __name__ == '__main__':
+    print('-----main running----')
     mainObj = core.mainObj()
     app.run()
