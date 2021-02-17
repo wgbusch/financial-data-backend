@@ -5,7 +5,7 @@ from flask import Flask, jsonify, Response, make_response, request, url_for
 from flask_cors import CORS
 from flask_restful import Resource, Api
 
-from xcfsdf import core
+import core
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}})
