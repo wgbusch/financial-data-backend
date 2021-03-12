@@ -1,7 +1,6 @@
 # Raw Package
 import datetime
 import json
-import multiprocessing
 import os
 import re
 import sys
@@ -11,7 +10,6 @@ import numpy as np
 import pandas as pd
 # Data Source
 import yfinance as yf
-from flask import jsonify
 # from joblib import Parallel, delayed, parallel_backend
 # Data viz
 from tqdm import tqdm
@@ -62,15 +60,14 @@ class mainObj:
             i += self.SLICE
         if (i < end):
             response.extend(self.fetch_today_info(watchlist[i:end]))
-        print(response)
+
         json_data = json.loads(pd.concat(response).to_json(orient="records"))
         columns_state = self.db.get_columns_state(view_name)
         response = {"data": json_data,
                     "columnDefs": self.add_master_grid_columns(json_data),
                     "columnsState": columns_state
                     }
-        print(response["columnDefs"])
-        print(response["columnsState"])
+
         return json.dumps(response)
 
     # 2
@@ -105,34 +102,27 @@ class mainObj:
 
     # 4
     def batch_download(self, list_of_tickers_to_download):
-        currentDate = datetime.date.today()
-
-        # manager = multiprocessing.Manager()
         market_data = []
+        self.get_info_for_ticker(list_of_tickers_to_download, market_data)
 
-        for ticker in tqdm(list_of_tickers_to_download):
-            self.get_info_for_ticker(ticker, market_data)
+        # for ticker in tqdm(list_of_tickers_to_download):
+        #     self.get_info_for_ticker(ticker, market_data)
 
-        # with parallel_backend('loky', n_jobs=multiprocessing.cpu_count()):
-        #     Parallel()(delayed(self.get_info_for_ticker)(ticker, market_data, currentDate)
-        #                for ticker in tqdm(list_of_tickers_to_download))
         df = pd.concat(market_data)
         return df
 
     # 5
-    def get_info_for_ticker(self, ticker, market_data, interval='1d'):
-        try:
-            data = self.download_ticker(ticker["symbol"])
-            # sometimes yf returns duplicate data, so we keep only the last row.
-            if (len(data) > 1):
-                data = data.iloc[[-1]]
-            data["Symbol"] = np.array(ticker["symbol"])
-            data["Name"] = np.array(ticker["name"])
-            data["Is_ETF"] = np.array(ticker["is_etf"])
-            market_data.append(data)
-        except Exception as e:
-            print(e)
-            pass
+    def get_info_for_ticker(self, tickers, market_data, interval='1d'):
+        symbols = list(map(lambda item: item["symbol"], tickers))
+
+        data = self.download_ticker(symbols)
+        # sometimes yf returns duplicate data, so we keep only the last row.
+        if (len(data) > 1):
+            data = data.iloc[[-1]]
+        # data["Symbol"] = np.array(tickers["symbol"])
+        # data["Name"] = np.array(tickers["name"])
+        # data["Is_ETF"] = np.array(tickers["is_etf"])
+        market_data.append(data)
 
     def add_master_grid_columns(self, data):
         columns_to_retrieve = self.db.get_grid_columns_map(data)
