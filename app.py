@@ -6,7 +6,7 @@ from flask import Flask, jsonify, Response, make_response, request, url_for
 from flask_cors import CORS
 from flask_restful import Resource, Api
 
-import appLogic
+import logic
 from model.Ticker import TickerSchema
 
 print('-----main running----')
@@ -26,10 +26,9 @@ def get_tickers():
     if (tickers):
         tickers_list = tickers.split(',')
     else:
-        return 'List of tickers not provided', 400
-    ticker_schema = TickerSchema()
-    result = ticker_schema.dump(appLogic.get_tickers(tickers_list), many=True)
-    return jsonify(result)
+        tickers_list=[]
+    result = logic.get_tickers(tickers_list)
+    return result
 
 
 @app.route('/incomes')
