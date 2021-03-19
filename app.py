@@ -1,17 +1,20 @@
-import os
-import sys
-
-import flask_restful
-from flask import Flask, jsonify, Response, make_response, request, url_for
+from flask import Flask, jsonify, Response, request
+from flask_caching import Cache
 from flask_cors import CORS
-from flask_restful import Resource, Api
+import re
 
 import logic
-from model.Ticker import TickerSchema
 
 print('-----main running----')
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}})
+config = {
+    "DEBUG": True,  # some Flask specific configs
+    "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
+app.config.from_mapping(config)
+cache = Cache(app)
 
 PREFIX = '/api/v1'
 
@@ -21,12 +24,18 @@ incomes = [
 
 
 @app.route(PREFIX + '/')
+# @cache.memoize(timeout=120)
 def get_tickers():
     tickers = request.args.get('tickers')
-    if (tickers):
-        tickers_list = tickers.split(',')
+    if tickers:
+        if re.search("^([a-zA-Z0-9.^=]+,)*[a-zA-Z0-9.^=]+$", tickers):
+            tickers_list = tickers.split(',')
+            if len(tickers_list) > 50:
+                return "Too many symbols", 400
+        else:
+            return "Invalid request", 400
     else:
-        tickers_list=[]
+        tickers_list = []
     result = logic.get_tickers(tickers_list)
     return result
 

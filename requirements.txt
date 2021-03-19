@@ -1,9 +1,8 @@
-pandas
-numpy
 Yfinance
 plotly
 requests
 flask_restful
+flask-caching
 html5lib
 flask_cors
 flask-swagger
@@ -11,3 +10,7 @@ gunicorn
 Flask
 joblib
 marshmallow
+numpy
+pandas
+pyEX
+

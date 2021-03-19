@@ -3,38 +3,44 @@ import datetime as dt
 
 
 class TickerSchema(Schema):
-    name = fields.Str()
     symbol = fields.Str()
+    name = fields.Str()
     open = fields.Float()
     low = fields.Float()
-    previous_close = fields.Float()
+    close = fields.Float()
     volume = fields.Integer()
     high = fields.Float()
     is_etf = fields.Boolean()
     ask = fields.Float()
     bid = fields.Float()
+    change = fields.Float()
+    changePercent = fields.Float()
+    ytdChange = fields.Float()
     quote = fields.Float()
-    quote_timestamp = fields.DateTime()
+    quote_timestamp = fields.Str()
 
 
-class Ticker():
+class Ticker:
     def __init__(self, symbol,
                  name=None,
                  open=None,
                  low=None,
-                 previous_close=None,
+                 close=None,
                  volume=None,
                  high=None,
                  is_etf=None,
                  ask=None,
                  bid=None,
+                 change=None,
+                 changePercent=None,
+                 ytdChange=None,
                  quote=None,
                  quote_timestamp=None):
         self.symbol = symbol
         self.name = name
         self.open = open
         self.low = low
-        self.previous_close = previous_close
+        self.close = close
         self.volume = volume
         self.high = high
         self.is_etf = is_etf

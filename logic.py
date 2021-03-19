@@ -1,13 +1,12 @@
 from flask import jsonify
 
-import api_connection
-from model.Ticker import Ticker, TickerSchema
-import yfinance as yf
+import iexcloud_api_connection as api_connection
+from model.Ticker import TickerSchema
 
 
 def get_tickers(tickers):
     columns = ["name", "symbol", "open", "low",
-               "previous_close", "volume", "high",
+               "close", "volume", "high",
                "is_etf", "ask", "bid", "quote", "quote_timestamp"]
 
     results = api_connection.get_realtime_data(tickers)
