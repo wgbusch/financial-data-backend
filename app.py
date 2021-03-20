@@ -1,9 +1,11 @@
+import re
+
 from flask import Flask, jsonify, Response, request
 from flask_caching import Cache
 from flask_cors import CORS
-import re
 
 import logic
+from model.Ticker import TickerSchema
 
 print('-----main running----')
 app = Flask(__name__)
@@ -17,10 +19,6 @@ app.config.from_mapping(config)
 cache = Cache(app)
 
 PREFIX = '/api/v1'
-
-incomes = [
-    {'description': 'salary', 'amount': 5000}
-]
 
 
 @app.route(PREFIX + '/')
@@ -36,18 +34,28 @@ def get_tickers():
             return "Invalid request", 400
     else:
         tickers_list = []
-    result = logic.get_tickers(tickers_list)
-    return result
 
+    tickers_cached = []
+    missing_tickers = []
+    for ticker_name in tickers_list:
+        ticker = cache.get(ticker_name)
+        if ticker:
+            tickers_cached.append(ticker)
+        else:
+            missing_tickers.append(ticker_name)
 
-@app.route('/incomes')
-def get_incomes():
-    return jsonify(incomes)
+    result = logic.get_tickers(missing_tickers)
+
+    for ticker in result:
+        cache.set(ticker["symbol"], ticker, timeout=60)
+        tickers_cached.append(ticker)
+
+    return jsonify({"data": tickers_cached,
+                    "columns": TickerSchema.columns()})
 
 
 @app.route('/incomes', methods=['POST'])
 def add_income():
-    incomes.append(request.get_json())
     return Response('', status=204, headers={"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type"})
 
 

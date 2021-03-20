@@ -1,5 +1,4 @@
 from marshmallow import Schema, fields
-import datetime as dt
 
 
 class TickerSchema(Schema):
@@ -13,11 +12,16 @@ class TickerSchema(Schema):
     is_etf = fields.Boolean()
     ask = fields.Float()
     bid = fields.Float()
-    change = fields.Float()
-    changePercent = fields.Float()
-    ytdChange = fields.Float()
+    change = fields.Tuple(tuple_fields=[fields.Float()])
+    change_percent = fields.Tuple(tuple_fields=[fields.Float()])
+    ytd_change = fields.Tuple(tuple_fields=[fields.Float()])
     quote = fields.Float()
     quote_timestamp = fields.Str()
+
+    @staticmethod
+    def columns():
+        return ["name", "symbol", "open", "low", "close", "volume", "high",
+                "is_etf", "ask", "bid", "quote", "quote_timestamp", "change", "change_percent"]
 
 
 class Ticker:
@@ -32,8 +36,8 @@ class Ticker:
                  ask=None,
                  bid=None,
                  change=None,
-                 changePercent=None,
-                 ytdChange=None,
+                 change_percent=None,
+                 ytd_change=None,
                  quote=None,
                  quote_timestamp=None):
         self.symbol = symbol
@@ -46,6 +50,9 @@ class Ticker:
         self.is_etf = is_etf
         self.ask = ask
         self.bid = bid
+        self.change = change,
+        self.change_percent = change_percent,
+        self.ytd_change = ytd_change,
         self.quote = quote
         self.quote_timestamp = quote_timestamp
 

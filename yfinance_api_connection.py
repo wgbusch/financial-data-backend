@@ -17,8 +17,8 @@ def construct_ticker(yf_ticker):
                   ask=yf_ticker["ask"],
                   bid=yf_ticker["bid"],
                   change=None,
-                  changePercent=None,
-                  ytdChange=None,
+                  change_percent=None,
+                  ytd_change=None,
                   quote=(yf_ticker["ask"] + yf_ticker["bid"]) / 2,
                   quote_timestamp=dt.datetime.now())
 
