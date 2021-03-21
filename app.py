@@ -1,6 +1,7 @@
+import os
 import re
 
-from flask import Flask, jsonify, Response, request
+from flask import Flask, jsonify, Response
 from flask_caching import Cache
 from flask_cors import CORS
 
@@ -21,10 +22,9 @@ cache = Cache(app)
 PREFIX = '/api/v1'
 
 
-@app.route(PREFIX + '/')
-# @cache.memoize(timeout=120)
-def get_tickers():
-    tickers = request.args.get('tickers')
+@app.route(PREFIX + '/tickers/', defaults={'tickers': ''})
+@app.route(PREFIX + '/tickers/<tickers>', methods=['GET'])
+def get_tickers(tickers):
     if tickers:
         if re.search("^([a-zA-Z0-9.^=]+,)*[a-zA-Z0-9.^=]+$", tickers):
             tickers_list = tickers.split(',')
@@ -54,9 +54,41 @@ def get_tickers():
                     "columns": TickerSchema.columns()})
 
 
-@app.route('/incomes', methods=['POST'])
+@app.route(PREFIX + '/incomes', methods=['POST'])
 def add_income():
     return Response('', status=204, headers={"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type"})
+
+
+@app.route(PREFIX + '/searchTicker/<search_query>', methods=['GET'])
+def search(search_query):
+    results = logic.search_for_ticker(search_query)
+    return jsonify(results)
+
+
+@app.route(PREFIX + '/save_symbols/', methods=['GET'])
+def save_symbols():
+    try:
+        is_local = os.environ["LOCAL"]
+    except Exception as e:
+        is_local = False
+    if is_local == 'true':
+        results = logic.save_symbols()
+        return jsonify(results)
+    else:
+        return 404
+
+
+@app.route(PREFIX + '/save_exchanges/', methods=['GET'])
+def save_exchanges():
+    try:
+        is_local = os.environ["LOCAL"]
+    except Exception as e:
+        is_local = False
+    if is_local == 'true':
+        results = logic.save_exchanges()
+        return jsonify(results)
+    else:
+        return '', 404
 
 
 if __name__ == '__main__':

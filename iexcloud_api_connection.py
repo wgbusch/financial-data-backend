@@ -1,9 +1,15 @@
+import os
+
 import pyEX as p
+import requests
 
 from app import app
 from model.Ticker import Ticker
 
 c = p.Client()
+iex_endpoint = 'https://cloud.iexapis.com/v1'
+all_exchanges = '/ref-data/market/us/exchanges'
+all_symbols = '/ref-data/symbols'
 
 
 def construct_ticker(iex_ticker):
@@ -48,4 +54,16 @@ def get_realtime_data(tickers):
     else:
         for ticker in er2:
             r.append(construct_ticker(er2[ticker]))
+    return r
+
+
+def get_all_symbols():
+    r = requests.get(url='https://cloud.iexapis.com/v1' + all_symbols,
+                     params={'token': os.environ["IEX_TOKEN"]})
+    return r
+
+
+def get_all_exchanges():
+    r = requests.get(url='https://cloud.iexapis.com/v1' + all_exchanges,
+                     params={'token': os.environ["IEX_TOKEN"]})
     return r

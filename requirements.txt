@@ -1,11 +1,12 @@
 Yfinance
 plotly
 requests
+levenshtein
+fast_autocomplete
 flask_restful
 flask-caching
 html5lib
 flask_cors
-flask-swagger
 gunicorn
 Flask
 joblib
