@@ -2,8 +2,6 @@ import os
 
 import pyEX as p
 import requests
-
-from app import app
 from model.Ticker import Ticker
 
 c = p.Client()
@@ -45,9 +43,7 @@ def get_realtime_data(tickers):
     if not tickers:
         return []
     r = []
-    app.logger.info('Message entered for ')
     er2 = c.bulkBatch(tickers, fields=['quote'])
-    app.logger.info('Message exited for ')
 
     if len(tickers) == 1:
         r.append(construct_ticker(er2))
