@@ -77,7 +77,6 @@ def save_symbols():
     return '', 404
 
 
-
 @app.route(PREFIX + '/save_exchanges/', methods=['GET'])
 def save_exchanges():
     try:
