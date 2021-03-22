@@ -69,26 +69,25 @@ def search(search_query):
 def save_symbols():
     try:
         is_local = os.environ["LOCAL"]
-    except Exception as e:
-        is_local = False
-    if is_local == 'true':
+    except:
+        return '', 404
+    if is_local:
         results = logic.save_symbols()
         return jsonify(results)
-    else:
-        return 404
+    return '', 404
+
 
 
 @app.route(PREFIX + '/save_exchanges/', methods=['GET'])
 def save_exchanges():
     try:
         is_local = os.environ["LOCAL"]
-    except Exception as e:
-        is_local = False
-    if is_local == 'true':
+    except:
+        return '', 404
+    if is_local:
         results = logic.save_exchanges()
         return jsonify(results)
-    else:
-        return '', 404
+    return '', 404
 
 
 if __name__ == '__main__':
