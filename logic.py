@@ -1,30 +1,41 @@
+import string
+
 from fast_autocomplete import AutoComplete
 
 import connections.db_connection as db
-import iexcloud_api_connection as api_connection
+import iexcloud_api_connection as iex_api_connection
+import yfinance_api_connection as yf_api_connection
 from model.Ticker import TickerSchema
 
 
 def get_tickers(tickers):
-    results = api_connection.get_realtime_data(tickers)
+    results = iex_api_connection.get_realtime_data(tickers)
     return TickerSchema().dump(results, many=True)
 
 
 def search_for_ticker(search_query):
     symbols = db.get_symbols_data()
-    autocomplete = AutoComplete(words=symbols)
+    valid_chars = "-."
+    valid_chars += string.ascii_lowercase
+    valid_chars += string.ascii_uppercase
+    autocomplete = AutoComplete(words=symbols, valid_chars_for_string=valid_chars)
     result = autocomplete.search(word=search_query, max_cost=0, size=7)
     return result
 
 
 def save_symbols():
-    symbols = api_connection.get_all_symbols()
-    dict = {}
+    symbols = iex_api_connection.get_all_symbols()
+    dictionary_of_symbols = {}
     for sym in symbols.json():
-        dict[sym["symbol"]] = sym
-    return db.save_symbols(dict)
+        dictionary_of_symbols[sym["symbol"]] = sym
+    return db.save_symbols(dictionary_of_symbols)
 
 
 def save_exchanges():
-    exchanges = api_connection.get_all_exchanges()
+    exchanges = iex_api_connection.get_all_exchanges()
     return db.save_exchanges(exchanges)
+
+
+def get_options(ticker):
+    options_result = yf_api_connection.get_options(ticker)
+    return options_result

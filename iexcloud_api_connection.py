@@ -49,7 +49,10 @@ def get_realtime_data(tickers):
         r.append(construct_ticker(er2))
     else:
         for ticker in er2:
-            r.append(construct_ticker(er2[ticker]))
+            try:
+                r.append(construct_ticker(er2[ticker]))
+            except Exception as e:
+                print("could not find symbol")
     return r
 
 
@@ -63,3 +66,11 @@ def get_all_exchanges():
     r = requests.get(url='https://cloud.iexapis.com/v1' + all_exchanges,
                      params={'token': os.environ["IEX_TOKEN"]})
     return r
+
+
+def get_options(ticker):
+    expirations = c.optionExpirations(ticker)
+    options = []
+    for opt in expirations:
+        options.append(c.options(opt, ticker))
+    return {"expirations": expirations, "options": options}

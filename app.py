@@ -1,11 +1,12 @@
 import os
 import re
 
-from flask import Flask, jsonify, Response
+from flask import Flask, jsonify
 from flask_caching import Cache
 from flask_cors import CORS
 
 import logic
+from model.Option import OptionSchema
 from model.Ticker import TickerSchema
 
 print('-----main running----')
@@ -22,11 +23,22 @@ cache = Cache(app)
 PREFIX = '/api/v1'
 
 
+@app.route(PREFIX + '/options/', defaults={'ticker': ''})
+@app.route(PREFIX + '/options/<ticker>', methods=['GET'])
+def get_options(ticker):
+    if re.search("^[a-zA-Z0-9.^=-]{1,7}$", ticker):
+        result = logic.get_options(ticker)
+        return jsonify({
+            "data": result,
+            "columns": OptionSchema.columns()})
+    return "", 404
+
+
 @app.route(PREFIX + '/tickers/', defaults={'tickers': ''})
 @app.route(PREFIX + '/tickers/<tickers>', methods=['GET'])
 def get_tickers(tickers):
     if tickers:
-        if re.search("^([a-zA-Z0-9.^=]+,)*[a-zA-Z0-9.^=]+$", tickers):
+        if re.search("^([a-zA-Z0-9.^=-]{1,6},)*[a-zA-Z0-9.^=-]{1,6}$", tickers):
             tickers_list = tickers.split(',')
             if len(tickers_list) > 50:
                 return "Too many symbols", 400
@@ -37,6 +49,7 @@ def get_tickers(tickers):
 
     tickers_cached = []
     missing_tickers = []
+    non_existing = []
     for ticker_name in tickers_list:
         ticker = cache.get(ticker_name)
         if ticker:
@@ -44,19 +57,20 @@ def get_tickers(tickers):
         else:
             missing_tickers.append(ticker_name)
 
-    result = logic.get_tickers(missing_tickers)
+    try:
+        result = logic.get_tickers(missing_tickers)
+    except Exception as e:
+        if e.args[1] == "Unknown symbol":
+            result = []
+            non_existing = missing_tickers
 
     for ticker in result:
         cache.set(ticker["symbol"], ticker, timeout=60)
         tickers_cached.append(ticker)
 
     return jsonify({"data": tickers_cached,
-                    "columns": TickerSchema.columns()})
-
-
-@app.route(PREFIX + '/incomes', methods=['POST'])
-def add_income():
-    return Response('', status=204, headers={"Access-Control-Allow-Headers": "X-PINGOTHER, Content-Type"})
+                    "columns": TickerSchema.columns(),
+                    "nonExistingSymbols": non_existing})
 
 
 @app.route(PREFIX + '/searchTicker/<search_query>', methods=['GET'])
