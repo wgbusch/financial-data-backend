@@ -31,3 +31,6 @@ options/
 .idea/
 __pycache__/
 /xcfsdf/SaxoConnection.py
+
+#data
+*.csv

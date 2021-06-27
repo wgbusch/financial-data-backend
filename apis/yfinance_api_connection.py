@@ -2,6 +2,7 @@ import datetime as dt
 
 import yfinance as yf
 
+from data.reference_data.Constants import STRFTIME_DATE_FORMAT
 from model.Option import OptionSchema, Option
 from model.Ticker import Ticker
 
@@ -43,10 +44,28 @@ def construct_ticker(yf_ticker):
 
 def get_realtime_data(tickers):
     response_from_api = yf.Tickers(tickers).tickers
+    yf.download(tickers, )
     r = []
     for t in response_from_api:
         r.append(construct_ticker(t.info))
     return r
+
+
+# created_date
+def get_historic_data(tickers, start_date=None, end_date=None):
+    if (end_date is None):
+        end_date = dt.datetime.today().strftime(STRFTIME_DATE_FORMAT)
+    else:
+        try:
+            end_date = dt.datetime.strptime(end_date, STRFTIME_DATE_FORMAT)
+        except Exception as e:
+            print("Incorrect formatting for end_date, required YYY-mm-dd")
+            return None
+    if (start_date is None):
+        lookback_days = 7
+        start_date = end_date - dt.timedelta(lookback_days)
+    resppp = yf.download(tickers, start_date, end_date)
+    return resppp
 
 
 def get_options(ticker):

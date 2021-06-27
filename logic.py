@@ -3,8 +3,7 @@ import string
 from fast_autocomplete import AutoComplete
 
 import connections.db_connection as db
-import iexcloud_api_connection as iex_api_connection
-import yfinance_api_connection as yf_api_connection
+from apis import iexcloud_api_connection as iex_api_connection, yfinance_api_connection as yf_api_connection
 from model.Ticker import TickerSchema
 
 

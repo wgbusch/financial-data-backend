@@ -1,5 +1,9 @@
 Yfinance
 plotly
+BeautifulSoup4
+saxo_openapi
+argparse
+openpyxl
 requests
 levenshtein
 fast_autocomplete
